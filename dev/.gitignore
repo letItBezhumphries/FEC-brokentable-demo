@@ -4,3 +4,5 @@
 
 devkey
 *.pub
+
+db-creds.yml

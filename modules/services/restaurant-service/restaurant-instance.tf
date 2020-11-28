@@ -1,0 +1,18 @@
+resource "aws_instance" "restaurant-service" {
+  ami           = var.AMI_ID
+  instance_type = var.INSTANCE_TYPE
+
+  # the VPC subnet
+  subnet_id = element(var.PUBLIC_SUBNETS, 0)
+
+  # the security group
+  vpc_security_group_ids = [aws_security_group.restaurant-sg.id]
+
+  # the public SSH key
+  key_name = aws_key_pair.mykeypair.key_name
+
+  tags = {
+    Name         = "restaurant-service-${var.ENV}"
+    Environmnent = var.ENV
+  }
+}

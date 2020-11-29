@@ -54,7 +54,6 @@
       "inline": [
         "sleep 10",
         "cd /home/ubuntu/FEC-Restaurant-Info-Module",
-        "sudo -u ubuntu touch /home/ubuntu/FEC-Restaurant-Info-Module/.env",
         "npm install"
       ],
       "execute_command": "{{ .Vars }} sudo -E sh '{{ .Path }}'",

@@ -5,9 +5,6 @@ set -ex
 apt-get update
 apt-get install mysql-client -y
 
-# Create .bash_profile file to persist .env vars
-sudo -u ubuntu touch /home/ubuntu/.bash_profile
-
 # install LTS nodesource PPA
 curl -sL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
 

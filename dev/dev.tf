@@ -5,22 +5,8 @@ module "main-vpc" {
   AWS_REGION = var.AWS_REGION
 }
 
-#module "restaurant-service" {
-#  source          = "../modules/services/restaurant-service"
-#  ENV             = var.ENV
-#  VPC_ID          = module.main-vpc.vpc_id
-#  PUBLIC_SUBNETS  = module.main-vpc.public_subnets
-  #PRIVATE_SUBNETS = module.main-vpc.private_subnets
-#  AMI_ID          = var.RESTAURANT_AMI_ID
-#  MYSQL_PASSWORD  = var.MYSQL_PASSWORD
-#  MYSQL_USERNAME  = var.MYSQL_USERNAME
-#  RDS_ENDPOINT    = module.restaurant-db.restaurant_rds_endpoint
-#  host            = split(":", module.restaurant-db.restaurant_rds_endpoint)[0]
-#  port            = split(":", module.restaurant-db.restaurant_rds_endpoint)[1]
-#}
-
 module "restaurant-db" {
-  source            = "../modules/data-stores/mysql-restaurant"
+  source            = "../modules/data-stores/mysql/restaurants-db"
   ENV               = var.ENV
   VPC_ID            = module.main-vpc.vpc_id
   PRIVATE_SUBNETS   = module.main-vpc.private_subnets
@@ -32,11 +18,10 @@ module "restaurant-db" {
 }
 
 module "restaurant-service" {
-  source          = "../modules/services/restaurant-service"
+  source          = "../modules/services/restaurants-server"
   ENV             = var.ENV
   VPC_ID          = module.main-vpc.vpc_id
   PUBLIC_SUBNETS  = module.main-vpc.public_subnets
-  #PRIVATE_SUBNETS = module.main-vpc.private_subnets
   AMI_ID          = var.RESTAURANT_AMI_ID
   MYSQL_PASSWORD  = var.MYSQL_PASSWORD
   MYSQL_USERNAME  = var.MYSQL_USERNAME

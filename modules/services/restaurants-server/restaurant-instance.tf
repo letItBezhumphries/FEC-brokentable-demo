@@ -11,6 +11,9 @@ resource "aws_instance" "restaurant-service" {
   # the public SSH key
   key_name = aws_key_pair.mykeypair.key_name
 
+  # User-data
+  user_data              = data.template_cloudinit_config.cloudinit-install-script.rendered
+  
   tags = {
     Name         = "restaurant-service-${var.ENV}"
     Environmnent = var.ENV

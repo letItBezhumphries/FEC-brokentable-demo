@@ -21,7 +21,7 @@ resource "aws_db_instance" "mysqldb" {
   engine_version          = "5.7"
   instance_class          = "db.t2.micro" # use micro if you want to use the free tier
   identifier              = "mysqldb"
-  name                    = "mysqldb"
+  name                    = var.DB_NAME
   username                = var.MYSQL_USERNAME  # username
   password                = var.MYSQL_PASSWORD # password
   db_subnet_group_name    = aws_db_subnet_group.mysqldb-subnet.name

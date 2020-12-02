@@ -11,6 +11,7 @@ module "restaurant-db" {
   VPC_ID            = module.main-vpc.vpc_id
   PRIVATE_SUBNETS   = module.main-vpc.private_subnets
   PUBLIC_SUBNETS    = module.main-vpc.public_subnets
+  DB_NAME           = var.RESTAURANT_DB_NAME
   MYSQL_PASSWORD    = var.MYSQL_PASSWORD
   MYSQL_USERNAME    = var.MYSQL_USERNAME
   RDS_AZ            = "${var.AWS_REGION}a"
@@ -23,6 +24,7 @@ module "restaurant-service" {
   VPC_ID          = module.main-vpc.vpc_id
   PUBLIC_SUBNETS  = module.main-vpc.public_subnets
   AMI_ID          = var.RESTAURANT_AMI_ID
+  DB_NAME         = var.RESTAURANT_DB_NAME
   MYSQL_PASSWORD  = var.MYSQL_PASSWORD
   MYSQL_USERNAME  = var.MYSQL_USERNAME
   RDS_ENDPOINT    = module.restaurant-db.restaurant_rds_endpoint

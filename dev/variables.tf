@@ -8,6 +8,12 @@ variable "ENV" {
   default = "dev"
 }
 
+variable "DB_NAME" {
+  description = "The name of the mysql database"
+  type        = string
+  default     = "restaurant_details"
+}
+
 variable "MYSQL_PASSWORD" {}
 
 variable "MYSQL_USERNAME" {}

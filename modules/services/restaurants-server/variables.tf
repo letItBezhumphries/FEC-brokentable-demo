@@ -35,3 +35,5 @@ variable "RDS_ENDPOINT" {
 variable "port" {}
 
 variable "host" {}
+
+variable "DB_NAME" {}

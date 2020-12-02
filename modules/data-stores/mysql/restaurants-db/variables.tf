@@ -29,3 +29,5 @@ variable "MYSQL_PASSWORD" {
 variable "MYSQL_USERNAME" {
 }
 
+variable "DB_NAME" {
+}

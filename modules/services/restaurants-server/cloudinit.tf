@@ -4,7 +4,8 @@ data "template_file" "init-script" {
     RDS_PASSWORD = var.MYSQL_PASSWORD
     RDS_HOST     = var.host
     RDS_USERNAME = var.MYSQL_USERNAME
-    RDS_PORT     = var.port
+    RDS_PORT     = var.port,
+    DB_NAME      = var.DB_NAME
   }
 }
 

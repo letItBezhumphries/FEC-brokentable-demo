@@ -25,5 +25,5 @@ echo $DOTENV_DB_NAME >> /home/ubuntu/FEC-Restaurant-Info-Module/.env
 # Run the shell script inside FEC-Reviews-Module that will create the mysql database
 sudo mysql -u ${RDS_USERNAME} -h ${RDS_HOST} -p${RDS_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME}" 
 
-# Run the seed script to seed Review_Module with records.
-#cd /home/ubuntu/FEC-Reviews-Module && npm run seed
+# Run the seed script to seed restaurant_details database with data.
+mysql ${DB_NAME} < /home/ubuntu/FEC-Restaurant-Info-Module/server/restaurants.sql

@@ -27,3 +27,6 @@ sudo mysql -u ${RDS_USERNAME} -h ${RDS_HOST} -p${RDS_PASSWORD} -e "CREATE DATABA
 
 # Run the seed script to seed restaurant_details database with data.
 mysql ${DB_NAME} < /home/ubuntu/FEC-Restaurant-Info-Module/server/restaurants.sql
+
+# start the server
+cd /home/ubuntu/FEC-Restaurant-Info-Module && npm start

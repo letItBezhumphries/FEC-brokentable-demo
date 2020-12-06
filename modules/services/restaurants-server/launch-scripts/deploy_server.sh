@@ -6,7 +6,9 @@ set -x
 groupadd restaurant-server
 
 # add application as system user
-useradd -d /home/ubuntu/FEC-Restaurant-Info-Module -s /bin/false -g restaurant-server restaurant-server
+useradd -d /home/ubuntu/FEC-Restaurant-Info-Module -r -s /bin/false -g restaurant-server restaurant-server
+
+tail -1 /etc/passwd
 
 DOTENV_PASSWORD="RDS_PASSWORD="${RDS_PASSWORD}
 DOTENV_HOSTNAME="RDS_HOSTNAME="${RDS_HOST}
@@ -64,4 +66,3 @@ WantedBy=multi-user.target' > /etc/systemd/system/restaurant-server.service
 systemctl enable restaurant-server
 systemctl start restaurant-server
 
-tail -1 /etc/passwd

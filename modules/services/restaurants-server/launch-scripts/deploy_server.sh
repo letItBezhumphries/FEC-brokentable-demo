@@ -44,7 +44,7 @@ sleep 10
 cd /home/ubuntu/FEC-Restaurant-Info-Module && npm run build
 
 # change owner of appication files to restaurant-server
-chown -R restaurant-server:restaurant-server /home/ubuntu/FEC-Restaurant-Info-Module
+sudo chown -R restaurant-server:restaurant-server /home/ubuntu/FEC-Restaurant-Info-Module
 
 echo '[Service]
 ExecStart=/usr/bin/nodejs /home/ubuntu/FEC-Restaurant-Info-Module/server/server.js

@@ -1,5 +1,5 @@
 data "template_file" "init-script" {
-  template = file("${path.module}/launch-scripts/setup_dotenv.sh")
+  template = file("${path.module}/launch-scripts/deploy_server.sh")
   vars     = {
     RDS_PASSWORD = var.MYSQL_PASSWORD
     RDS_HOST     = var.host

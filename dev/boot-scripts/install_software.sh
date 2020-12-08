@@ -7,8 +7,8 @@ sudo apt-get update
 sudo apt-get install -y ntpdate curl wget git apt-transport-https ca-certificates vim lvm2 unzip gcc make build-essential
 
 # Setup sudo to allow no-password sudo for "reviews-service" group and adding "ubuntu" user
-sudo groupadd -r reviews-admin
-sudo usermod -a -G reviews-admin ubuntu
+sudo groupadd -r brokentable-admin
+sudo usermod -a -G brokentable-admin ubuntu
 sudo cp /etc/sudoers /etc/sudoers.orig
 echo "ubuntu ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/ubuntu
 

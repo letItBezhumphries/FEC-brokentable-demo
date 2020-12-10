@@ -2,13 +2,8 @@
 
 set -x
 
-# add the application as a group, called restaurant-server
-groupadd restaurant-server
-
-# add application as system user
-useradd -d /home/ubuntu/FEC-Restaurant-Info-Module -r -s /bin/false -g restaurant-server restaurant-server
-
-tail -1 /etc/passwd
+#set npm config permissions
+sudo chown -R $USER:$(id -gn $USER) /home/ubuntu/.config
 
 DOTENV_PASSWORD="RDS_PASSWORD="${RDS_PASSWORD}
 DOTENV_HOSTNAME="RDS_HOSTNAME="${RDS_HOST}
@@ -31,6 +26,14 @@ echo $DOTENV_USERNAME >> /home/ubuntu/FEC-Restaurant-Info-Module/.env
 echo $DOTENV_PORT >> /home/ubuntu/FEC-Restaurant-Info-Module/.env
 echo $DOTENV_DB_NAME >> /home/ubuntu/FEC-Restaurant-Info-Module/.env
 
+# Run the sql file against restaurant_details to add necessary tables
+mysql -u ${RDS_USERNAME} -h ${RDS_HOST} --password=${RDS_PASSWORD} -f ${DB_NAME} < /home/ubuntu/FEC-Restaurant-Info-Module/server/restaurants.sql
+
+sleep 10
+
+# run the webpack build command
+cd /home/ubuntu/FEC-Restaurant-Info-Module && npm run build
+
 # Create the mysql database restaurant_details
 sudo mysql -u ${RDS_USERNAME} -h ${RDS_HOST} -p${RDS_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS restaurant_details" 
 
@@ -43,26 +46,25 @@ sleep 10
 # run the webpack build command
 cd /home/ubuntu/FEC-Restaurant-Info-Module && npm run build
 
-# change owner of appication files to restaurant-server
-sudo chown -R restaurant-server:restaurant-server /home/ubuntu/FEC-Restaurant-Info-Module
+cd /home/ubuntu/FEC-Restaurant-Info-Module && npm install pm2 -g
 
-echo '[Service]
-ExecStart=/usr/bin/nodejs /home/ubuntu/FEC-Restaurant-Info-Module/server/server.js
-WorkingDirectory=/home/ubuntu/FEC-Restaurant-Info-Module
-Restart=always
-RestartSec=10
-StandardOutput=syslog
-StandardError=syslog
-SyslogIdentifier=restaurant-server
-User=restaurant-server
-Group=restaurant-server
+#echo '[Service]
+#ExecStart=/usr/bin/nodejs /home/ubuntu/FEC-Restaurant-Info-Module/server/server.js
+#WorkingDirectory=/home/ubuntu/FEC-Restaurant-Info-Module
+#Restart=always
+#RestartSec=10
+#StandardOutput=syslog
+#StandardError=syslog
+#SyslogIdentifier=restaurant-server
+#User=restaurant-server
+#Group=restaurant-server
 #User=ubuntu
 #Group=ubuntu
-Environment=NODE_ENV=production
-[Install]
-WantedBy=multi-user.target' > /etc/systemd/system/restaurant-server.service
+#Environment=NODE_ENV=production
+#[Install]
+#WantedBy=multi-user.target' > /etc/systemd/system/restaurant-server.service
 
 # Enable and start restaurant-server as a service on boot
-systemctl enable restaurant-server
-systemctl start restaurant-server
+#systemctl enable restaurant-server
+#systemctl start restaurant-server
 

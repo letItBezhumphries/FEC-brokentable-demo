@@ -32,12 +32,14 @@ variable "MYSQL_USERNAME" {
 variable "RDS_ENDPOINT" {
 }
 
-variable "port" {}
+variable "port" {
+}
 
-variable "host" {}
+variable "host" {
+}
 
-variable "DB_NAME" {}
+variable "DB_NAME" {
+}
 
-variable "SERVICE" {}
-
-
+variable "SERVICE" {
+}

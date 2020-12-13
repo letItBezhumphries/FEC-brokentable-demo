@@ -1,4 +1,4 @@
-resource "aws_security_group" "restaurant-sg" {
+resource "aws_security_group" "reviews-sg" {
   vpc_id      = var.VPC_ID
   name        = "allow-ssh-${var.ENV}"
   description = "security group that allows ssh and all egress traffic"
@@ -18,7 +18,7 @@ resource "aws_security_group" "restaurant-sg" {
   }
 
   tags = {
-    Name         = "allow-ssh"
+    Name         = "allow-ssh-${var.ENV}"
     Environmnent = var.ENV
   }
 }

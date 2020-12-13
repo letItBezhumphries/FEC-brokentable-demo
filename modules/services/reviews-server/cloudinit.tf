@@ -9,7 +9,6 @@ data "template_file" "init-script" {
   }
 }
 
-
 data "template_cloudinit_config" "cloudinit-install-script" {
   gzip = false
   base64_encode = false
@@ -18,5 +17,4 @@ data "template_cloudinit_config" "cloudinit-install-script" {
     content_type = "text/x-shellscript"
     content      = data.template_file.init-script.rendered
   }
-
 }

@@ -7,7 +7,7 @@ resource "aws_security_group" "allow-mysqldb" {
     from_port       = 3306
     to_port         = 3306
     protocol        = "tcp"
-    security_groups = [var.RESTAURANT_SG_ID] # allowing access from the restaurant-service instance
+    security_groups = [var.REVIEWS_SG_ID] # allowing access from the reviews-server instance
   }
  
   egress {

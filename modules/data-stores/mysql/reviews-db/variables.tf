@@ -1,5 +1,4 @@
 variable "ENV" {
-  description = "The current environment for this project"
 }
 
 variable "PUBLIC_SUBNETS" {
@@ -13,11 +12,13 @@ variable "PRIVATE_SUBNETS" {
 variable "RDS_AZ" {
 }
 
-variable "RESTAURANT_SG_ID" {
-  description = "The securitygroup id for the restaurants-server"
+variable "REVIEWS_SG_ID" {
 }
 
 variable "SERVICE" {
+  description = "The name of the microservice for this instance."
+  type        = string
+  default     = "reviews"
 }
 
 variable "VPC_ID" {

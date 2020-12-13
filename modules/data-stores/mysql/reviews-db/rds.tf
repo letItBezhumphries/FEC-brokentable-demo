@@ -19,7 +19,7 @@ resource "aws_db_instance" "mysqldb" {
   allocated_storage       = 100 # 100 GB of storage
   engine                  = "mysql"
   engine_version          = "5.7"
-  instance_class          = "db.t2.micro" 
+  instance_class          = "db.t2.micro"
   identifier              = "mysqldb"
   name                    = var.DB_NAME
   username                = var.MYSQL_USERNAME  # username
@@ -31,7 +31,7 @@ resource "aws_db_instance" "mysqldb" {
   storage_type            = "gp2"
   backup_retention_period = 30                                   
   availability_zone       = var.RDS_AZ
-  skip_final_snapshot     = true      # skip final snapshot when doing terraform destroy
+  skip_final_snapshot     = true # skip final snapshot when doing terraform destroy
   tags = {
     Name = "mysqldb-${var.SERVICE}"
     Environment = var.ENV

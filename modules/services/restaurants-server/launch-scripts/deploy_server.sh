@@ -45,7 +45,7 @@ Documentation=https://example.com
 After=network.target
 
 [Service]
-Environment=HOME=/home/ubuntu RDS_USERNAME=admin RDS_PASSWORD=${RDS_PASSWORD} RDS_HOST=${RDS_HOST} RDS_PORT=${RDS_PORT} DB_NAME=${DB_NAME}
+Environment=HOME=/home/ubuntu RDS_USERNAME=${RDS_USERNAME} RDS_PASSWORD=${RDS_PASSWORD} RDS_HOST=${RDS_HOST} RDS_PORT=${RDS_PORT} DB_NAME=${DB_NAME}
 ExecStart=/usr/bin/node /home/ubuntu/FEC-Restaurant-Info-Module/server/server.js
 Type=simple
 WorkingDirectory=/home/ubuntu/FEC-Restaurant-Info-Module

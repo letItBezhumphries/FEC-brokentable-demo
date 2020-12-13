@@ -1,0 +1,9 @@
+.terraform
+*.tfstate
+*.tfstate.backup
+
+devkey
+*.pub
+
+*-amivar.tf
+.bashrc

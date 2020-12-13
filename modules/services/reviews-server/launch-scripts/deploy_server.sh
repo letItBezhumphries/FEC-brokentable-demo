@@ -2,65 +2,69 @@
 
 set -x
 
-# add the application as a group, called reviews-server
-groupadd reviews-server
+#set npm config permissions
+sudo -E chown -R ubuntu:ubuntu /home/ubuntu/.config
 
-# add application as user
-useradd -d /home/ubuntu/FEC-Reviews-Module -s /bin/false -g reviews-server reviews-server
-
-tail -1 /etc/passwd
-
-DOTENV_PASSWORD="RDS_PASSWORD="${RDS_PASSWORD}
-DOTENV_HOSTNAME="RDS_HOSTNAME="${RDS_HOST}
-DOTENV_USERNAME="RDS_USERNAME="${RDS_USERNAME}
-DOTENV_PORT="RDS_PORT="${RDS_PORT}
-DOTENV_DB_NAME="DB_NAME="${DB_NAME}
-BASHENV_RDS_PASSWORD="export RDS_PASSWORD="${RDS_PASSWORD}
-BASHENV_RDS_HOST="export RDS_HOST="${RDS_HOST}
-
-# Create .env file for DOTENV variables needed to seed db
+# Create .env file to store 'dotenv' variables needed to seed db
 sudo -u ubuntu touch /home/ubuntu/FEC-Reviews-Module/.env
+sudo -u ubuntu touch /home/ubuntu/FEC-Reviews-Module/.my.cnf
 
-echo $BASHENV_RDS_PASSWORD >> /home/ubuntu/.bashrc
-echo $BASHENV_RDS_HOST >> /home/ubuntu/.bashrc
+# Create the $HOME directory
+echo "export HOME=/home/ubuntu" >> /home/ubuntu/.profile
 
-# Add the above variables to the .env file
-echo $DOTENV_PASSWORD >> /home/ubuntu/FEC-Reviews-Module/.env
-echo $DOTENV_HOSTNAME >> /home/ubuntu/FEC-Reviews-Module/.env
-echo $DOTENV_USERNAME >> /home/ubuntu/FEC-Reviews-Module/.env
-echo $DOTENV_PORT >> /home/ubuntu/FEC-Reviews-Module/.env
-echo $DOTENV_DB_NAME >> /home/ubuntu/FEC-Reviews-Module/.env
+# Add the variables passed in from cloudinit.tf to the .env file
+cat > /home/ubuntu/FEC-Reviews-Module/.env << _EOF
+RDS_USERNAME=${RDS_USERNAME}
+RDS_PASSWORD=${RDS_PASSWORD}
+RDS_HOST=${RDS_HOST}
+RDS_PORT=${RDS_PORT}
+DB_NAME=${DB_NAME}
+_EOF
 
-# Create the mysql database Review_Module
-sudo mysql -u root -h ${RDS_HOST} -p${RDS_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS Review_Module"
+# Add the variables and values to mysql client config file
+cat > /home/ubuntu/FEC-Reviews-Module/.my.cnf << _EOF
+[client]
+user=${RDS_USERNAME}
+host=${RDS_HOST}
+password=${RDS_PASSWORD}
+_EOF
 
-# Run the seed script to seed Review_Module database with records.
-cd /home/ubuntu/FEC-Reviews-Module && npm run seed
+# Run the sql file against restaurant_details to add necessary tables
+mysql --defaults-file=/home/ubuntu/FEC-Reviews-Module/.my.cnf -e "CREATE DATABASE IF NOT EXISTS Review_Module"
 
 sleep 10
 
-# Run the webpack build script
+# run the seeding script to seed the database
+cd /home/ubuntu/FEC-Reviews-Module && npm run seed
+
+# run the webpack build command
 cd /home/ubuntu/FEC-Reviews-Module && npm run build
 
-# change file permissions for application
-sudo chown -R reviews-server:reviews-server /home/ubuntu/FEC-Reviews-Module
+# create systemd service file to start and enable reviews-server on ec2 launch
+sudo -E cat > /etc/systemd/system/reviews-server.service << _EOF
+[Unit]
+Description=reviews_server.js
+Documentation=https://example.com
+After=network.target
 
-echo '[Service]
-ExecStart=/usr/bin/nodejs /home/ubuntu/FEC-Reviews-Module/server/server.js
+[Service]
+Environment=HOME=/home/ubuntu RDS_USERNAME=${RDS_USERNAME} RDS_PASSWORD=${RDS_PASSWORD} RDS_HOST=${RDS_HOST} RDS_PORT=${RDS_PORT} DB_NAME=${DB_NAME}
+ExecStart=/usr/bin/node /home/ubuntu/FEC-Reviews-Module/server/server.js
+Type=simple
 WorkingDirectory=/home/ubuntu/FEC-Reviews-Module
-Restart=always
-RestartSec=10
+#Restart=always
+#RestartSec=10
+Restart=on-failure
 StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=reviews-server
-User=reviews-server
-Group=reviews-server
-#User=ubuntu
-#Group=ubuntu
-Environment=NODE_ENV=production
-[Install]
-WantedBy=multi-user.target' > /etc/systemd/system/reviews-server.service
+User=ubuntu
 
+[Install]
+WantedBy=multi-user.target
+_EOF
+
+# Enable and start reviews-server as a service on boot
+systemctl daemon-reload
 systemctl enable reviews-server
 systemctl start reviews-server
-

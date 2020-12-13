@@ -1,0 +1,11 @@
+.terraform
+*.tfstate
+*.tfstate.backup
+
+devkey
+*.pub
+
+db-creds.yml
+*-amivar.tf
+
+.bashrc
